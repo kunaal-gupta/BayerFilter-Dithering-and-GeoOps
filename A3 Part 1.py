@@ -34,21 +34,60 @@ def part1():
             IG[row + 2, col + 3] = (int(img[row + 2, col + 2]) + int(img[row + 1, col + 3]) + int(
                 img[row + 3, col + 3])) / 3
 
-            IG[row + 1, col] = (int(img[row, col]) + int(img[row + 2, col]) + int(img[row + 1, col+1])) / 3
-            IG[row + 1, col+2] = (int(img[row + 1, col+1]) + int(img[row + 1, col + 3]) + int(img[row, col+1]) + int(img[row + 2, col + 1])) / 4
+            IG[row + 1, col] = (int(img[row, col]) + int(img[row + 2, col]) + int(img[row + 1, col + 1])) / 3
+            IG[row + 1, col + 2] = (int(img[row + 1, col + 1]) + int(img[row + 1, col + 3]) + int(
+                img[row, col + 1]) + int(img[row + 2, col + 1])) / 4
 
-            IG[row + 3, col] = (int(img[row+2, col]) + int(img[row + 3, col+1]) ) / 2
-            IG[row + 3, col+2] = (int(img[row + 3, col+1]) + int(img[row + 2, col + 2]) + int(img[row +3 , col+3]) ) / 3
-
-
+            IG[row + 3, col] = (int(img[row + 2, col]) + int(img[row + 3, col + 1])) / 2
+            IG[row + 3, col + 2] = (int(img[row + 3, col + 1]) + int(img[row + 2, col + 2]) + int(
+                img[row + 3, col + 3])) / 3
 
     # TODO: show green (IR) in first subplot (221) and add title - refer to rgb one for hint on plotting
     # plt.figure(figsize=(10, 8))
-    plt.imshow(IG, cmap='gray')
-    plt.show()
+    # plt.imshow(IG, cmap='gray')
+    # plt.show()
     # ...
-#
-#     # TODO: reconstruction of the red channel IR (simiar to loops above),
+    #
+    #     # TODO: reconstruction of the red channel IR (simiar to loops above),
+    IR = np.copy(img)  # copy the image into each channel
+
+    for row in range(0, h, 4):  # loop step is 4 since our mask size is 4.
+        for col in range(0, w, 4):  # loop step is 4 since our mask size is 4.
+            # TODO: compute pixel value for each location where mask is unshaded (0)
+
+            # First Row
+            IR[row, col + 2] = (int(img[row, col + 1]) + int(img[row, col + 3])) / 2
+            IR[row, col] = (int(img[row, col + 1]))
+
+            # Second Row
+            IR[row + 1, col + 1] = (int(img[row, col + 1]) + int(img[row + 2, col + 1])) / 2
+            IR[row + 1, col + 2] = (int(img[row, col + 1]) + int(img[row, col + 3]) + int(img[row + 2, col + 1]) + int(
+                img[row + 2, col + 3])) / 4
+            IR[row + 1, col + 3] = (int(img[row, col + 3]) + int(img[row + 2, col + 3])) / 2
+            IR[row + 1, col] = (int(img[row + 1, col + 1]))
+
+            # Third Row
+            IR[row + 2, col] = (int(img[row + 2, col + 1]))
+            IR[row + 2, col+2] = (int(img[row + 2, col + 1]) + int(img[row + 2, col + 3])) / 2
+
+            # Fourth Row
+            IR[row + 3, col] = (int(img[row + 2, col + 1]))
+            IR[row + 3, col+1] = (int(img[row + 2, col + 1]))
+            IR[row + 3, col+2] = (int(img[row + 2, col + 2]))
+            IR[row + 3, col+3] = (int(img[row + 2, col + 3]))
+
+    plt.figure(figsize=(10, 8))
+    plt.imshow(IR, cmap='gray')
+    plt.show()
+
+
+
+
+
+
+
+
+
 #     #
 #     # TODO: show IR in second subplot (224) and title
 #     # ...
