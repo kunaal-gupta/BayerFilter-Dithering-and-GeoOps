@@ -76,13 +76,41 @@ def part1():
             IR[row + 3, col+2] = (int(img[row + 2, col + 2]))
             IR[row + 3, col+3] = (int(img[row + 2, col + 3]))
 
+    # plt.figure(figsize=(10, 8))
+    # plt.imshow(IR, cmap='gray')
+    # plt.show()
+
+    IB = np.copy(img)  # copy the image into each channel
+
+    for row in range(0, h, 4):  # loop step is 4 since our mask size is 4.
+        for col in range(0, w, 4):  # loop step is 4 since our mask size is 4.
+            # TODO: compute pixel value for each location where mask is unshaded (0)
+
+            # Fourth Row
+            IB[row+3, col + 1] = (int(img[row+3, col]) + int(img[row +3 , col + 2])) / 2
+            IB[row+3, col+3] = (int(img[row+3, col + 2]))
+
+            # Third Row
+            IB[row + 2, col] = (int(img[row+1, col]) + int(img[row + 3, col])) / 2
+            IB[row + 2, col + 1] = (int(img[row+1, col]) + int(img[row+1, col + 2]) + int(img[row + 3, col]) + int(
+                img[row + 3, col + 2])) / 4
+            IB[row + 2, col + 2] = (int(img[row + 1, col + 2]) + int(img[row + 3, col + 2])) / 2
+            IB[row + 2, col + 3] = (int(img[row + 2, col + 2]))
+
+            # Second Row
+            IB[row + 1, col+1] = (int(img[row + 1, col]) + int(img[row + 1, col+2]))/2
+            IB[row + 1, col+3] = (int(img[row + 1, col + 2]))
+
+            # First Row
+            IB[row, col] = (int(img[row + 1, col]))
+            IB[row, col+1] = (int(img[row + 1, col + 1]))
+            IB[row, col+2] = (int(img[row + 1, col + 2]))
+            IB[row, col+3] = (int(img[row + 1, col + 3]))
+
+
     plt.figure(figsize=(10, 8))
-    plt.imshow(IR, cmap='gray')
+    plt.imshow(IB, cmap='gray')
     plt.show()
-
-
-
-
 
 
 
