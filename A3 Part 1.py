@@ -24,7 +24,7 @@ def part1():
 
     for row in range(0, h, 4):  # loop step is 4 since our mask size is 4.
         for col in range(0, w, 4):  # loop step is 4 since our mask size is 4.
-            # TODO: compute pixel value for each location where mask is unshaded (0) 
+            # TODO: compute pixel value for each location where mask is unshaded (0)
             # interpolate each pixel using its every valid (shaded) neighbour
             IG[row, col + 1] = (int(img[row, col]) + int(img[row, col + 2]) + int(img[row + 1, col + 1])) / 3
             IG[row, col + 3] = (int(img[row, col + 2]) + int(img[row + 1, col + 3])) / 2
@@ -108,11 +108,14 @@ def part1():
             IB[row, col+3] = (int(img[row + 1, col + 3]))
 
 
+    # plt.figure(figsize=(10, 8))
+    # plt.imshow(IB, cmap='gray')
+    # plt.show()
+
+    rgb = np.dstack((IR, IG, IB))
     plt.figure(figsize=(10, 8))
-    plt.imshow(IB, cmap='gray')
+    plt.imshow(rgb, cmap='gray')
     plt.show()
-
-
 
 
 
