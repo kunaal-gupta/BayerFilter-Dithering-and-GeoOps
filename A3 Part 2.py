@@ -23,7 +23,11 @@ def makePalette(colours):
 # Returns a kd-tree palette with those colours
 def findPalette(image, nColours):
     # TODO: perform KMeans clustering to get 'colours' --  the computed k means
-
+    w, h, d = original_shape = tuple(image.shape)
+    assert d == 3
+    image_array = np.reshape(image, (w * h, d))
+    kmeans = KMeans(n_clusters=nColours, random_state=0).fit(image_array)
+    colours = kmeans.cluster_centers_
     colours_img = np.zeros((50, int(nColours*50), 3), dtype=np.float32)
     start_id = 0
     for col_id in range(nColours):
@@ -40,31 +44,24 @@ def findPalette(image, nColours):
 
 
 def ModifiedFloydSteinbergDitherColor(image, palette):
-    """
-    The following pseudo-code for a grayscale image is grabbed from Wikipedia:
-    https://en.wikipedia.org/wiki/Floyd%E2%80%93Steinberg_dithering.
-    The error distribution has been modified according to the instructions on eClass.
-
-    total_abs_err := 0
-    for each y from top to bottom ==> (height)
-        for each x from left to right ==> (width)
-            oldpixel  := image[x][y]
-            newpixel  := nearest(oldpixel) # Determine the new colour for the current pixel from palette
-            image[x][y]  := newpixel 
-            quant_error  := oldpixel - newpixel
-
-            total_abs_err := total_abs_err + abs(quant_error)
-
-            image[x + 1][y    ] := image[x + 1][y    ] + quant_error * 11 / 26 
-            image[x - 1][y + 1] := image[x - 1][y + 1] + quant_error * 5 / 26
-            image[x    ][y + 1] := image[x    ][y + 1] + quant_error * 7 / 26
-            image[x + 1][y + 1] := image[x + 1][y + 1] + quant_error * 3 / 26
-
-    avg_abs_err := total_abs_err / image.size
-    """
 
     # TODO: implement agorithm for RGB image (hint: you need to handle error in each channel separately)
+    total_abs_err = 0
+    for y in np.arange(0, image.shape[0]-1, 1):
+        for x in np.arange(0, image.shape[1]-1, 1):
+            oldpixel = image[x][y].copy()
+            newpixel = nearest(palette, oldpixel) # Determine the new colour for the current pixel from palette
+            image[x][y] = newpixel
+            quant_error = oldpixel - newpixel
 
+            total_abs_err = total_abs_err + abs(quant_error)
+
+            image[x + 1][y    ] = image[x + 1][y    ] + quant_error * 11 / 26
+            image[x - 1][y + 1] = image[x - 1][y + 1] + quant_error * 5 / 26
+            image[x    ][y + 1] = image[x    ][y + 1] + quant_error * 7 / 26
+            image[x + 1][y + 1] = image[x + 1][y + 1] + quant_error * 3 / 26
+
+    avg_abs_err = total_abs_err / image.size
     return image
 
 
