@@ -23,17 +23,18 @@ def makePalette(colours):
 # Returns a kd-tree palette with those colours
 def findPalette(image, nColours):
     # TODO: perform KMeans clustering to get 'colours' --  the computed k means
-    w, h, d = original_shape = tuple(image.shape)
+    w, h, d = tuple(image.shape)
     assert d == 3
     image_array = np.reshape(image, (w * h, d))
     kmeans = KMeans(n_clusters=nColours, random_state=0).fit(image_array)
     colours = kmeans.cluster_centers_
+
     colours_img = np.zeros((50, int(nColours*50), 3), dtype=np.float32)
-    start_id = 0
-    for col_id in range(nColours):
-        end_id = start_id + 50
-        colours_img[:, start_id:end_id, :] = colours[col_id, :]
-        start_id = end_id
+    SID = 0
+    for col_id in range(1, nColours):
+        end_id = SID + 50
+        colours_img[:, SID:end_id, :] = colours[col_id, :]
+        SID = end_id
 
     print(f'colours:\n{colours}')
 
